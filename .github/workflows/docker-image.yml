@@ -2,21 +2,23 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag learning_cicd:$(date +%s)
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag learning_cicd:$(date +%s)
 
-    - name: Log in to Docker Hub
-      run: |
-        echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+      - name: Log in to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-    - name: Push image to Docker Hub
-      run: docker push learning_cicd:$(date +%s)
+      - name: Push image to Docker Hub
+        run: docker push learning_cicd:$(date +%s)
